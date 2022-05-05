@@ -12,6 +12,8 @@ def select_word():
 
 
 def check_letter(word):
+    lifes = 6
+    hang_pic = 0
     alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'ñ', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',]
     special_char = ['á', 'é', 'í', 'ó', 'ú','ü']
     accepted_char = alphabet + special_char
@@ -21,8 +23,10 @@ def check_letter(word):
     actual_word= "".join(user_letter_list)
     os.system("clear")
     
-    while actual_word != word:
-        print("Adivina la palabra!!!")
+    while actual_word != word and lifes > 0:
+        # os.system("clear")
+        print("ADIVINA LA PALABRA!!!")
+        draw_man(lifes, hang_pic)
         print(actual_word.upper().replace("", " "))
         print("")
         try: 
@@ -31,10 +35,12 @@ def check_letter(word):
                 raise ValueError("Solo puedes ingresar una letra a la vez")
             if user_letter.isnumeric() or user_letter not in accepted_char:
                 raise TypeError("Solo puedes ingresar letras")
+            if user_letter not in word:
+                lifes -= 1
+                hang_pic += 1
             for count, letter in enumerate(word):
                 if user_letter == letter:
                     user_letter_list[count] = user_letter
-
             actual_word= "".join(user_letter_list)
             os.system("clear")
         except TypeError as te:
@@ -47,7 +53,42 @@ def check_letter(word):
             print("")
 
     # print(actual_word.upper())
-    print("¡Ganaste! La palabra es " + word.upper())
+    if lifes > 0:
+        os.system("clear")
+        print("ADIVINA LA PALABRA!!!")
+        draw_man(lifes, hang_pic)
+        print(actual_word.upper().replace("", " "))
+        print("")
+        print("¡Ganaste! La palabra es " + word.upper())
+        print("")
+    else:
+        os.system("clear")
+        print("ADIVINA LA PALABRA!!!")
+        draw_man(lifes, hang_pic)
+        print(actual_word.upper().replace("", " "))
+        print("")
+        print("NO TE QUEDAN VIDAS!!!\n")
+        print("La palabra era " + word.upper() + "\n")
+        print("JUEGO FINALIZADO")
+        print("")
+
+def draw_man(lifes, hang_pic):
+    hang_pics = ["  +---+\n  |   |\n      |\n      |\n      |\n      |\n=========", 
+
+        "  +---+\n  |   |\n  O   |\n      |\n      |\n      |\n=========",
+
+        "  +---+\n  |   |\n  O   |\n  |   |\n      |\n      |\n=========",
+
+        "  +---+\n  |   |\n  O   |\n /|   |\n      |\n      |\n=========", 
+
+        "  +---+\n  |   |\n  O   |\n /|\  |\n      |\n      |\n=========",
+
+        "  +---+\n  |   |\n  O   |\n /|\  |\n /    |\n      |\n=========",
+
+        "  +---+\n  |   |\n  O   |\n /|\  |\n / \  |\n      |\n========="] 
+
+    print("Intentos restantes: " + str(lifes))
+    print(hang_pics[hang_pic])
     print("")
 
 
@@ -65,16 +106,12 @@ def run():
             elif repeat_game == 'n':
                 repeat = False
             else:
-                os.system("clear")
-                print("Solo puedes seleccionar S o N !!!")
+                # os.system("clear")
+                print("Solo puedes seleccionar S o N")
                 print("")
     print("")
-    print("Hasta luego...")
+    print("HASTA LUEGO...")
     print("")
-
-
-
-
 
 
 if __name__ == '__main__':
