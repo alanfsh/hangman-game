@@ -8,40 +8,55 @@ def select_word():
             words.append(line.rstrip())
 
     random_word = random.choice(words)
-    return random_word
+    return random_word.upper()
 
 
-def check_letter(word):
+def draw_man(lifes):
+    hang_image = ["  +---+\n  |   |\n  O   |\n /|\  |\n / \  |\n      |\n=========",
+        "  +---+\n  |   |\n  O   |\n /|\  |\n /    |\n      |\n=========",
+        "  +---+\n  |   |\n  O   |\n /|\  |\n      |\n      |\n=========",
+        "  +---+\n  |   |\n  O   |\n /|   |\n      |\n      |\n=========",
+        "  +---+\n  |   |\n  O   |\n  |   |\n      |\n      |\n=========",
+        "  +---+\n  |   |\n  O   |\n      |\n      |\n      |\n=========",
+        "  +---+\n  |   |\n      |\n      |\n      |\n      |\n=========",
+        ] 
+    print("ADIVINA LA PALABRA!!!")
+    print("Vidas: " + str(lifes))
+    print(hang_image[lifes])
+    print("")
+
+
+def game(word):
     lifes = 6
-    hang_pic = 0
-    alphabet = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'ñ', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',]
-    special_char = ['á', 'é', 'í', 'ó', 'ú','ü']
+    # Characters accepted
+    alphabet = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',]
+    special_char = ['Á', 'É', 'Í', 'Ó', 'Ú','Ü',]
     accepted_char = alphabet + special_char
-    user_letter_list = ["_" for i in range(len(word))]
-    # for spaces in range(len(word)):
-    #     user_letter_list.append("_")
-    actual_word= "".join(user_letter_list)
-    os.system("clear")
-    
-    while actual_word != word and lifes > 0:
-        # os.system("clear")
-        print("ADIVINA LA PALABRA!!!")
-        draw_man(lifes, hang_pic)
-        print(actual_word.upper().replace("", " "))
-        print("")
+
+    found_letters = ["_"] * len(word)  # All letters found
+    user_word= "".join(found_letters)  # String that contains the letters found
+    os.system("clear")   
+
+    while user_word != word and lifes > 0:
+        draw_man(lifes)
+        print(user_word.replace("", " ") + "\n")  # Prints the incomplete word with "_"
         try: 
-            user_letter = input("Ingresa una letra: ").lower()
-            if len(user_letter) > 1:
+            letter = input("Ingresa una letra: ").upper()
+            if len(letter) > 1:  # User only can type 1 character
                 raise ValueError("Solo puedes ingresar una letra a la vez")
-            if user_letter.isnumeric() or user_letter not in accepted_char:
+
+            if letter not in accepted_char:
                 raise TypeError("Solo puedes ingresar letras")
-            if user_letter not in word:
+
+            if letter in word:
+                for index, character in enumerate(word):
+                    if letter == character:
+                        found_letters[index] = letter  # Replace the "_" with the user letter
+
+            if letter not in word:
                 lifes -= 1
-                hang_pic += 1
-            for count, letter in enumerate(word):
-                if user_letter == letter:
-                    user_letter_list[count] = user_letter
-            actual_word= "".join(user_letter_list)
+                
+            user_word= "".join(found_letters)
             os.system("clear")
         except TypeError as te:
             os.system("clear")
@@ -51,53 +66,23 @@ def check_letter(word):
             os.system("clear")
             print(ve)
             print("")
-
-    # print(actual_word.upper())
+    
+    os.system("clear")
+    draw_man(lifes)
+    print(user_word.replace("", " ") + "\n")
     if lifes > 0:
-        os.system("clear")
-        print("ADIVINA LA PALABRA!!!")
-        draw_man(lifes, hang_pic)
-        print(actual_word.upper().replace("", " "))
-        print("")
-        print("¡Ganaste! La palabra es " + word.upper())
-        print("")
+        print("¡Ganaste! La palabra es " + word + "\n")
     else:
-        os.system("clear")
-        print("ADIVINA LA PALABRA!!!")
-        draw_man(lifes, hang_pic)
-        print(actual_word.upper().replace("", " "))
-        print("")
         print("NO TE QUEDAN VIDAS!!!\n")
         print("La palabra era " + word.upper() + "\n")
-        print("JUEGO FINALIZADO")
-        print("")
-
-def draw_man(lifes, hang_pic):
-    hang_pics = ["  +---+\n  |   |\n      |\n      |\n      |\n      |\n=========", 
-
-        "  +---+\n  |   |\n  O   |\n      |\n      |\n      |\n=========",
-
-        "  +---+\n  |   |\n  O   |\n  |   |\n      |\n      |\n=========",
-
-        "  +---+\n  |   |\n  O   |\n /|   |\n      |\n      |\n=========", 
-
-        "  +---+\n  |   |\n  O   |\n /|\  |\n      |\n      |\n=========",
-
-        "  +---+\n  |   |\n  O   |\n /|\  |\n /    |\n      |\n=========",
-
-        "  +---+\n  |   |\n  O   |\n /|\  |\n / \  |\n      |\n========="] 
-
-    print("Intentos restantes: " + str(lifes))
-    print(hang_pics[hang_pic])
-    print("")
 
 
 def run():
     repeat = True
     while repeat:
         word = select_word()
-        # print(word)
-        check_letter(word)
+        print(word)
+        game(word)
         repeat_game = ""
         while repeat_game != 's' and repeat_game != 'n':
             repeat_game = input("¿Quieres jugar otra vez? S/N: ").lower()
@@ -107,11 +92,9 @@ def run():
                 repeat = False
             else:
                 # os.system("clear")
-                print("Solo puedes seleccionar S o N")
-                print("")
-    print("")
-    print("HASTA LUEGO...")
-    print("")
+                print("Solo puedes seleccionar S o N\n")
+    
+    print("\nHASTA LUEGO...\n")
 
 
 if __name__ == '__main__':
