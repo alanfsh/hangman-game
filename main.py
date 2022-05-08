@@ -95,7 +95,6 @@ def run():
     repeat = True
     while repeat:
         word = select_word()
-        print(word)
         game(word)
         repeat_game = ""
         while repeat_game != 's' and repeat_game != 'n':
