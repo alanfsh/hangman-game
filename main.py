@@ -97,6 +97,7 @@ def run():
         word = select_word()
         game(word)
         repeat_game = ""
+        # Option to restart the game
         while repeat_game != 's' and repeat_game != 'n':
             repeat_game = input("¿Quieres jugar otra vez? S/N: ").lower()
             if repeat_game == 's':
